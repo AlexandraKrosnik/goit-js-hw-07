@@ -34,13 +34,13 @@ function findOriginSrc(src) {
 }
 
 function onModelClose(e) {
+    console.log(this);
     if (e.code !== "Escape")
     {
         return;
     }
     instance.close();
-
-    window.removeEventListener("keydown", onModelClose);
+    this.removeEventListener("keydown", onModelClose);
 }
 
 function onOpenModalWindow(event) {
@@ -52,9 +52,9 @@ function onOpenModalWindow(event) {
     let imageOriginalSrc = findOriginSrc(event.target.src);
     instance = basicLightbox.create(`<img src="${imageOriginalSrc}" alt ="${event.target.alt}">`);
    
-    instance.show();  
+    instance.show(()=>this.addEventListener("keydown", onModelClose));  
 
-    window.addEventListener("keydown", onModelClose);
+    
 }
 
 
