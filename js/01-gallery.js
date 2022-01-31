@@ -35,9 +35,7 @@ function findOriginSrc(src) {
     return galleryItems.find(img => img.preview === src).original;   
 }
 
-function onModelClose(e) {
-    
-    console.log(this);
+function onModelClose(e) {   
     if (e.code !== "Escape")
     {
         return;
