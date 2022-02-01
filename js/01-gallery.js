@@ -10,11 +10,7 @@ let instance;
 
 galleryEl.innerHTML = gallery;
 
-
-
 galleryEl.addEventListener("click", onOpenModalWindow);
-
-
 
 function makeGalery(items) {
     return items.map(item => `
@@ -40,26 +36,30 @@ function onModelClose(e) {
     {
         return;
     }
-    instance.close();    
+
+    instance.close();  
+    
     this.removeEventListener("keydown", onModelClose);    
 }
 
 function onOpenModalWindow(event) {
+
     event.preventDefault();
+
     if (event.target.nodeName !== "IMG")
     {
         return;    
     }
+
     let imageOriginalSrc = findOriginSrc(event.target.src);
+
     instance = basicLightbox.create(`<img src="${imageOriginalSrc}" alt ="${event.target.alt}">`, {
         onShow: (instance) => document.body.style.overflow = "hidden",
         onClose: (instance) => document.body.style.overflow = "visible"
     });
    
     instance.show(() => this.addEventListener("keydown", onModelClose));  
-    
 
-    
 }
 
 
