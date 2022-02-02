@@ -6,8 +6,6 @@ const galleryEl = document.querySelector(".gallery");
 
 const gallery = makeGalery(galleryItems);
 
-let instance;
-
 galleryEl.innerHTML = gallery;
 
 galleryEl.addEventListener("click", onOpenModalWindow);
@@ -27,9 +25,16 @@ function makeGalery(items) {
     `).join("");
 }
 
-function findOriginSrc(src) {
-    return galleryItems.find(img => img.preview === src).original;   
-}
+const instance = basicLightbox.create(`<img src="" alt ="">`, {
+    onShow: (instance) => {
+        document.body.style.overflow = "hidden";
+        window.addEventListener("keydown", onModelClose);
+    },
+    onClose: (instance) => {
+        document.body.style.overflow = "visible";
+        window.removeEventListener("keydown", onModelClose);
+    }
+    });
 
 function onModelClose(e) {   
     if (e.code !== "Escape")
@@ -37,9 +42,7 @@ function onModelClose(e) {
         return;
     }
 
-    instance.close();  
-    
-    this.removeEventListener("keydown", onModelClose);    
+    instance.close();          
 }
 
 function onOpenModalWindow(event) {
@@ -51,14 +54,11 @@ function onOpenModalWindow(event) {
         return;    
     }
 
-    let imageOriginalSrc = findOriginSrc(event.target.src);
-
-    instance = basicLightbox.create(`<img src="${imageOriginalSrc}" alt ="${event.target.alt}">`, {
-        onShow: (instance) => document.body.style.overflow = "hidden",
-        onClose: (instance) => document.body.style.overflow = "visible"
-    });
-   
-    instance.show(() => this.addEventListener("keydown", onModelClose));  
+    let imageOriginalSrc = event.target.dataset.source;
+    instance.element().querySelector('img').src = imageOriginalSrc;
+    instance.element().querySelector('img').alt = event.target.alt;
+  
+    instance.show(); 
 
 }
 
